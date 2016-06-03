@@ -11,6 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+/**
+ * user route
+ * 
+ */
+Route::group(['middleware' => ['web']], function () {
+    Route::get ( '/customer', 'CustomerController@index' );
+    Route::post ( '/customer/store', 'CustomerController@store' );
+    Route::post ( '/customer/update', 'CustomerController@update' );
+    Route::get ( '/customer/edit/{id}', 'CustomerController@edit' );
 });
+
+Route::group(['middleware' => ['web']], function () {
+	Route::auth();
+    Route::get ('/', 'HomeController@index');
+});
+
