@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
 use App\Customer;
+use Validator;
+use Illuminate\Foundation\Validation\ValidationException;
 
 class CustomerController extends Controller
 {   
@@ -42,13 +44,26 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->c->first_name= $request->first_name;
-        $this->c->last_name= $request->last_name;
-        $this->c->phone= $request->phone;
-        $this->c->save();
-        //Session::flash('message', 'Insert Successful');
-        echo "Insert Successful";
-        return redirect('customer');
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|unique:tbl_customer,first_name',
+            'last_name' => 'required',
+            'phone' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            
+            return redirect('/customer')->withErrors($validator)->withInput();
+        }
+        else
+        {
+            $this->c->first_name= $request->first_name;
+            $this->c->last_name= $request->last_name;
+            $this->c->phone= $request->phone;
+            $this->c->save();
+            return redirect('customer');
+        }
+        
     }
 
     /**

@@ -24,8 +24,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get ( '/customer/delete/{id}', 'CustomerController@destroy' );
 });
 
-Route::group(['middleware' => ['web']], function () {
-	Route::auth();
-    Route::get ('/', 'HomeController@index');
-});
+// Route::group(['middleware' => ['web']], function () {
+// 	Route::auth();
+//     Route::get ('/', 'HomeController@index');
+// });
 
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
