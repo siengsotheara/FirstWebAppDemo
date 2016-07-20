@@ -13,7 +13,7 @@ class CustomerRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,17 @@ class CustomerRequest extends Request
     public function rules()
     {
         return [
-            //
+            'first_name' => 'required|regex:/^[a-zA-Z+\s]+$/',
+            'last_name' => 'required|regex:/^[a-zA-Z+\s]+$/',
+            'phone' => 'required|numeric',
+
         ];
     }
+    // public function messages()
+    // {
+    //     return [
+    //         'first_name.required' => 'A title is required',
+    //         'last_name.required'  => 'A message is required',
+    //     ];
+    // }
 }

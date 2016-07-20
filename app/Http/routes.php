@@ -22,14 +22,20 @@ Route::group(['middleware' => ['web']], function () {
     Route::post ( '/customer/update', 'CustomerController@update' );
     Route::get ( '/customer/edit/{id}', 'CustomerController@edit' );
     Route::get ( '/customer/delete/{id}', 'CustomerController@destroy' );
+    Route::get('/customer/share', function()
+	{
+    	return Share::load('http://www.example.com', 'My example')->linkedin();
+	});
+    
 });
 
 // Route::group(['middleware' => ['web']], function () {
 // 	Route::auth();
 //     Route::get ('/', 'HomeController@index');
 // });
-
-
+Route::get('/',function(){
+    return view('welcome');
+});
 Route::auth();
 
 Route::get('/home', 'HomeController@index');

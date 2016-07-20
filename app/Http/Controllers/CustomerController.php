@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Share;  
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
@@ -22,8 +22,12 @@ class CustomerController extends Controller
      */
     public function index()
     {
+
+       // die(env('APP_URL', 'http://localhost'));
         $customers = $this->c->all();
-        return view ('customer', compact('customers'));
+        $current_url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+        $current_url = Share::load('http://www.couchbase.com/nosql-resources/why-nosql')->gplus();
+        return view ('customer', compact('customers'), compact('current_url'));
     }
 
     /**
@@ -42,14 +46,16 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
+        $messages = [
+            'first_name.required' => 'សូមបំពេញត្រកូលរបស់អ្នក!',
+            'last_name.required' => 'សូមបំពេញឈ្មោះរបស់អ្នក!',
+            'first_name.unique' => 'ត្រកូលនេះមានរួចម្តងហើយសូមដាក់ អាផ្សេងមក',
+            'phone.required' => 'បំពេញលេខទូរស័ព្ទផងNob'
+        ];
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|unique:tbl_customer,first_name',
-            'last_name' => 'required',
-            'phone' => 'required'
-        ]);
+        $validator = Validator::make($request->all(),[],$messages);
 
         if ($validator->fails()) {
             
@@ -66,6 +72,11 @@ class CustomerController extends Controller
         
     }
 
+    public function Share(){
+        $current_url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+        $current_url = Share::load('http://www.example.com', 'My example')->facebook();
+        return view ('share', compact('current_url'));
+    }
     /**
      * Display the specified resource.
      *

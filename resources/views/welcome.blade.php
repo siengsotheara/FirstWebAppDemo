@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@include('components.share', ['url' => 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']])
 @section('content')
 <div class="container">
     <div class="row">
